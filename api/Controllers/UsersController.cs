@@ -83,5 +83,22 @@ namespace api.Controllers
 
             return Ok("Changes have been saved");
         }
+
+        [HttpDelete("delete-user/{email}")]
+        public async Task<ActionResult> DeleteUser(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+
+            if (user == null)
+            {
+                return BadRequest("No user with given email");
+            }
+
+            _context.Users.Remove(user);
+
+            await _context.SaveChangesAsync();
+            
+            return Ok("User has been removed");
+        }
     }
 }
