@@ -3,11 +3,11 @@ using System.Text;
 using api.Data;
 using api.DTO;
 using api.Entities;
+using api.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-
+using api.Services;
 namespace api.Controllers
 {
     [ApiController]
@@ -15,10 +15,12 @@ namespace api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly TokenService _token;
         private readonly IMapper _mapper;
-        public AccountController(DataContext context, IMapper mapper)
+        public AccountController(DataContext context, TokenService token, IMapper mapper)
         {
             _mapper = mapper;
+            _token = token;
             _context = context;
         }
 
@@ -44,15 +46,16 @@ namespace api.Controllers
 
             await _context.SaveChangesAsync();
 
-            return new UserDto
+            return Ok(new UserDto
             {
                 Name = user.Name,
                 Surname = user.Surname,
                 Phone = user.Phone,
                 Email = user.Email,
                 Role = user.Role,
-                SpecificRole = user.SpecificRole
-            };
+                SpecificRole = user.SpecificRole,
+                Token = _token.CreateToken(user)
+            });
         }
 
         [HttpPost("login")]
@@ -73,11 +76,20 @@ namespace api.Controllers
             {
                 if(login_hash[i] != user.PasswordHash[i])
                 {
-                    return BadRequest("Password does not match");
+                    return Unauthorized("Password does not match");
                 }
             }
 
-            return Ok(user);
+            return Ok(new UserDto 
+            {
+                Name = user.Name,
+                Surname = user.Surname,
+                Phone = user.Phone,
+                Email = user.Email,
+                Role = user.Role,
+                SpecificRole = user.SpecificRole,
+                Token = _token.CreateToken(user)
+            });
         }
     }
 }
