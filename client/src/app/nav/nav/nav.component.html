@@ -1,0 +1,19 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+  
+    <div class="container">
+      <a class="navbar-brand" routerLink="/" routerLinkActive="active"><strong>Client's List</strong></a>
+      <ng-container *ngIf="!(accountService.currentUser$ | async)">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/register" routerLinkActive="active">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/login" routerLinkActive="active">Log in</a>
+            </li>
+        </ul>
+      </ng-container>
+      <ng-container *ngIf="(accountService.currentUser$ | async)">
+          <a class="nav-link" (click)="logout()" routerLink="/" routerLinkActive="active">Log out</a>
+      </ng-container>
+    </div>
+</nav>
