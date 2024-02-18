@@ -7,7 +7,6 @@ using api.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using api.Services;
 namespace api.Controllers
 {
     [ApiController]
