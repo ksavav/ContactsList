@@ -21,7 +21,7 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateUser(UpdateDto updatedUser)
+        public async Task<ActionResult> UpdateUser(UpdateContactDto updatedUser)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == updatedUser.Email);
 
@@ -41,10 +41,10 @@ namespace api.Controllers
             }
 
             user.Name = updatedUser.Name;
-            user.Surname = updatedUser.Surname;
+            user.Lastname = updatedUser.Lastname;
             user.Phone = updatedUser.Phone;
-            user.Role = updatedUser.Role;
-            user.SpecificRole = updatedUser.SpecificRole;
+            //user.Role = updatedUser.Role;
+            //ser.SpecificRole = updatedUser.SpecificRole;
 
             await _context.SaveChangesAsync();
 

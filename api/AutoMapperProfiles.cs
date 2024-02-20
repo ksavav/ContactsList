@@ -11,6 +11,7 @@ namespace api
             CreateMap<RegisterDto, User>();
             CreateMap<User, LoginDto>();
             CreateMap<User, UserDto>();
+            CreateMap<ContactDto, Contact>();
         }
     }
 }

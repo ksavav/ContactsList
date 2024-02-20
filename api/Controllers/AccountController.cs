@@ -24,7 +24,7 @@ namespace api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserDto>> Register(RegisterDto new_user) // userDTO
+        public async Task<ActionResult<UserDto>> Register(RegisterDto new_user)
         {
             if (await _context.Users.AnyAsync(x => x.Email.ToLower() == new_user.Email))
             {
@@ -39,7 +39,7 @@ namespace api.Controllers
             user.PasswordSalt = hash.Key;
 
             user.Name = new_user.Name.ToLower();
-            user.Surname = new_user.Surname.ToLower();
+            user.Lastname = new_user.Lastname.ToLower();
             
             _context.Users.Add(user);
 
@@ -48,12 +48,11 @@ namespace api.Controllers
             return Ok(new UserDto
             {
                 Name = user.Name,
-                Surname = user.Surname,
+                Lastname = user.Lastname,
                 Phone = user.Phone,
                 Email = user.Email,
-                Role = user.Role,
-                SpecificRole = user.SpecificRole,
-                Token = _token.CreateToken(user)
+                Token = _token.CreateToken(user),
+                UserContacts = user.UserContacts
             });
         }
 
@@ -82,12 +81,11 @@ namespace api.Controllers
             return Ok(new UserDto 
             {
                 Name = user.Name,
-                Surname = user.Surname,
+                Lastname = user.Lastname,
                 Phone = user.Phone,
                 Email = user.Email,
-                Role = user.Role,
-                SpecificRole = user.SpecificRole,
-                Token = _token.CreateToken(user)
+                Token = _token.CreateToken(user),
+                UserContacts = user.UserContacts
             });
         }
     }

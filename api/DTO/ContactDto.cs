@@ -1,14 +1,12 @@
-using api.Entities;
-
 namespace api.DTO
 {
-    public class UserDto
+    public class ContactDto
     {
         public string Name { get; set; }
         public string Lastname { get; set; }
         public int Phone { get; set; }
         public string Email { get; set; }
-        public string Token { get; set; }
-        public List<Contact> UserContacts { get; set; }
+        public string Role { get; set; }
+        public string SpecificRole { get; set; }
     }
 }

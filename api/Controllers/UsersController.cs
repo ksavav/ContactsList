@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using api.Data;
 using api.DTO;
 using api.Entities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +53,36 @@ namespace api.Controllers
             }
 
             return Ok(_mapper.Map<UserDto>(user));
+        }
+
+        [Authorize]
+        [HttpPost("add-contact")]
+        public async Task<ActionResult<ContactDto>> AddContact(ContactDto newContact)
+        {
+            var tokenEmail = User.FindFirst(ClaimTypes.Name)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == tokenEmail);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (await _context.Contacts.AnyAsync(
+                x => x.Email.ToLower() == newContact.Email && x.UserId == user.Id))
+            {
+                return BadRequest("You already have contact with this email");
+            }
+
+            var contact = _mapper.Map<Contact>(newContact);
+
+            contact.Name = newContact.Name.ToLower();
+            contact.Lastname = newContact.Lastname.ToLower();
+
+            user.UserContacts.Add(contact);
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
