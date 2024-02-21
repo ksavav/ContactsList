@@ -51,7 +51,7 @@ namespace api.Controllers
             return Ok();
         }
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ContactDto>> GetContact(int id)
         {
             var contact = await _context.Contacts.FirstOrDefaultAsync(x => x.Id == id);
@@ -64,7 +64,7 @@ namespace api.Controllers
             return Ok(_mapper.Map<ContactDto>(contact));
         }
 
-        [HttpGet("/email/{email}")]
+        [HttpGet("email/{email}")]
         public async Task<ActionResult<ContactDto>> GetContact(string email)
         {
             var contact = await _context.Contacts.FirstOrDefaultAsync(x => x.Email == email);
@@ -77,14 +77,14 @@ namespace api.Controllers
             return Ok(_mapper.Map<ContactDto>(contact));
         }
 
-        [HttpGet("/for-user/{email}")]
+        [HttpGet("for-user/{email}")]
         public async Task<ActionResult<IEnumerable<ContactDto>>> GetAllUserContacts(string email)
         {
             throw new NotImplementedException();
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ContactDto>>> GetContacts(string email)
+        public async Task<ActionResult<IEnumerable<ContactDto>>> GetContacts()
         {
             var contacts = await _context.Contacts.ToListAsync();
 
