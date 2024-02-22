@@ -8,9 +8,7 @@ using api.Data;
 namespace api.Controllers
 {
     [Authorize]
-    [ApiController]
-    [Route("api/[controller]")]
-    public class EditController : ControllerBase
+    public class EditController : BaseApi
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -19,32 +17,38 @@ namespace api.Controllers
             _context = context;
             _mapper = mapper;
         }
-
+        
         [HttpPut]
-        public async Task<ActionResult> UpdateUser(UpdateContactDto updatedUser)
+        public async Task<ActionResult> UpdateUser(UpdateContactDto updatedUser) // zmiana na contact
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == updatedUser.Email);
+            var user = await GetCredentials(_context);
+            var contact = await _context.Contacts.FirstOrDefaultAsync(x => x.Email == updatedUser.Email);
 
-            if (user == null)
+            if (user == null || contact == null)
             {
                 return BadRequest("Something went wrong");
             }
 
+            if (contact.UserId != user.Id)
+            {
+                return BadRequest("You can edit only your contacts!");
+            }
+
             if (updatedUser.NewEmail != null)
             {
-                if (await _context.Users.FirstOrDefaultAsync(x => x.Email == updatedUser.NewEmail) != null)
+                if (await _context.Contacts.FirstOrDefaultAsync(x => x.Email == updatedUser.NewEmail) != null)
                 {
                     return BadRequest("This email is already used");
                 }
 
-                user.Email = updatedUser.NewEmail;
+                contact.Email = updatedUser.NewEmail;
             }
 
-            user.Name = updatedUser.Name;
-            user.Lastname = updatedUser.Lastname;
-            user.Phone = updatedUser.Phone;
-            //user.Role = updatedUser.Role;
-            //ser.SpecificRole = updatedUser.SpecificRole;
+            contact.Name = updatedUser.Name;
+            contact.Lastname = updatedUser.Lastname;
+            contact.Phone = updatedUser.Phone;
+            contact.Role = updatedUser.Role;
+            contact.SpecificRole = updatedUser.SpecificRole;
 
             await _context.SaveChangesAsync();
 
@@ -52,7 +56,7 @@ namespace api.Controllers
         }
 
         [HttpDelete("delete-user/{email}")]
-        public async Task<ActionResult> DeleteUser(string email)
+        public async Task<ActionResult> DeleteUser(string email) // zmiana na contact
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
 

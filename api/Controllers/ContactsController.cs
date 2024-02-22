@@ -9,9 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ContactsController : ControllerBase
+    public class ContactsController : BaseApi
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -25,8 +23,7 @@ namespace api.Controllers
         [HttpPost("add-contact")]
         public async Task<ActionResult<ContactDto>> AddContact(ContactDto newContact)
         {
-            var tokenEmail = User.FindFirst(ClaimTypes.Name)?.Value;
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == tokenEmail);
+            var user = await GetCredentials(_context);
 
             if (user == null)
             {
@@ -77,10 +74,25 @@ namespace api.Controllers
             return Ok(_mapper.Map<ContactDto>(contact));
         }
 
-        [HttpGet("for-user/{email}")]
-        public async Task<ActionResult<IEnumerable<ContactDto>>> GetAllUserContacts(string email)
+        [Authorize]
+        [HttpGet("for-user")]
+        public async Task<ActionResult<IEnumerable<ContactDto>>> GetAllUserContacts()
         {
-            throw new NotImplementedException();
+            var user = await GetCredentials(_context);    
+
+            if (user == null) 
+            {
+                return NotFound();
+            }
+
+            var contacts = await _context.Contacts.Where(x => x.UserId == user.Id).ToListAsync();
+            
+            if (contacts == null) 
+            {
+                return NotFound("This user has no contacts!");
+            }
+
+            return Ok(_mapper.Map<IEnumerable<ContactDto>>(contacts));
         }
 
         [HttpGet]
