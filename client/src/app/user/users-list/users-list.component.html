@@ -1,24 +1,31 @@
-<table id="user-list" class="table table-striped table-dark">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Surname</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Email</th>
-            <th scope="col">Role</th>
-            <th scope="col">Specific Role</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let user of users; let id = index">
-            <th scope="row">{{ id + 1 }}</th>
-            <td>{{ user.name }}</td>
-            <td>{{ user.surname }}</td>
-            <td>{{ user.phone }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.role }}</td>
-            <td>{{ user.specificRole }}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="d-flex flex-column">
+    <div class="p-2">
+        <button *ngIf="user != null" (click)="addNewContact()" type="submit" class="btn btn-primary">Add contact</button>
+    </div>
+    <div class="p-2">
+        <table id="user-list" class="table table-striped table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Surname</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Specific Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let contact of contacts; let id = index">
+                    <th scope="row">{{ id + 1 }}</th>
+                    <td>{{ contact.name | titlecase }}</td>
+                    <td>{{ contact.lastname | titlecase }}</td>
+                    <td>{{ contact.phone }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>{{ contact.role }}</td>
+                    <td>{{ contact.specificRole }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

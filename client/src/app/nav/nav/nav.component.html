@@ -13,6 +13,7 @@
         </ul>
       </ng-container>
       <ng-container *ngIf="(accountService.currentUser$ | async)">
+          <p class="d-flex">Welcome, {{ this.userName | titlecase }} {{ this.userLastname | titlecase }}</p>
           <a class="nav-link" (click)="logout()" routerLink="/" routerLinkActive="active">Log out</a>
       </ng-container>
     </div>

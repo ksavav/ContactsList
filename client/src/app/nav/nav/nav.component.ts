@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 import { AccountService } from 'src/app/services/account.service';
 
 @Component({
@@ -9,7 +10,34 @@ import { AccountService } from 'src/app/services/account.service';
 })
 export class NavComponent {
 
+  userName: string | undefined
+  userLastname: string | undefined
+
   constructor(public accountService: AccountService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.getUserInformations();
+      });
+  }
+
+  getUserInformations() {
+    var tempUserName = ""
+    var tempUserLastname = ""
+    this.accountService.currentUser$.subscribe({
+      next(value) {
+        if (value != null) {
+          tempUserName = value.name
+          tempUserLastname = value.lastname
+        }
+      },
+    })
+
+    this.userName = tempUserName
+    this.userLastname = tempUserLastname
+  }
 
   login() {
     this.router.navigateByUrl('/login')
@@ -22,4 +50,6 @@ export class NavComponent {
   logout() {
     this.accountService.logout()
   }
+
+  
 }
