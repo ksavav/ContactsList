@@ -8,6 +8,7 @@ import { NavComponent } from './nav/nav/nav.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginScreenComponent } from './login/login-screen/login-screen.component';
 import { RegisterScreenComponent } from './login/register-screen/register-screen.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { RegisterScreenComponent } from './login/register-screen/register-screen
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

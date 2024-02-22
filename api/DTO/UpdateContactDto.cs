@@ -1,9 +1,9 @@
 namespace api.DTO
 {
-    public class UpdateDto
+    public class UpdateContactDto
     {
         public string Name { get; set; }
-        public string Surname { get; set; }
+        public string Lastname { get; set; }
         public int Phone { get; set; }
         public string Email { get; set; }
         public string NewEmail { get; set; }

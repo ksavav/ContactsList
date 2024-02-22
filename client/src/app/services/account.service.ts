@@ -17,7 +17,7 @@ export class AccountService {
   constructor(private http: HttpClient) { }
 
   login(loginUser: any) {
-    return this.http.post<any>(this.url + "account/login", loginUser).pipe(
+    return this.http.post<User>(this.url + "/account/login", loginUser).pipe(
       map((response: User) => {
         let user = response
         if(user) {
@@ -28,7 +28,7 @@ export class AccountService {
   }
 
   register(newUser: any) {
-    return this.http.post<any>(this.url + "account/register", newUser).pipe(
+    return this.http.post<User>(this.url + "/account/register", newUser).pipe(
       map(user => {
         if(user) {
           this.currentUserSource.next(user)

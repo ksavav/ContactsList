@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Entities
 {
-    public class User
+    public class Contact
     {
         [Key]
         public int Id { get; set; }
@@ -11,7 +12,10 @@ namespace api.Entities
         public string Email { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
+        public string Role { get; set; }
+        public string SpecificRole { get; set; }
         public int Phone { get; set; }
-        public List<Contact> UserContacts { get; set; } = new List<Contact>();
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }
