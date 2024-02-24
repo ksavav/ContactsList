@@ -1,14 +1,12 @@
 <div class="d-flex flex-column">
-    <div class="p-2">
-        <button *ngIf="user != null" (click)="addNewContact()" type="submit" class="btn btn-primary">Add contact</button>
-    </div>
+    <app-add-contact (ItemEvent)="addNewContact($event)" *ngIf="user != null"></app-add-contact>
     <div class="p-2">
         <table id="user-list" class="table table-striped table-dark">
             <thead>
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Surname</th>
+                    <th scope="col">Lastname</th>
                     <th scope="col">Phone</th>
                     <th scope="col">Email</th>
                     <th scope="col">Role</th>
@@ -16,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let contact of contacts; let id = index">
+                <tr *ngFor="let contact of contacts; let id = index" (click)="viewContact(contact)">
                     <th scope="row">{{ id + 1 }}</th>
                     <td>{{ contact.name | titlecase }}</td>
                     <td>{{ contact.lastname | titlecase }}</td>

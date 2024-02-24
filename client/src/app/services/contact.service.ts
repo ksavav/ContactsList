@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
 import { HttpClient } from '@angular/common/http'
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Contact } from '../models/contact';
 
 @Injectable({
@@ -26,6 +26,7 @@ export class ContactService {
   }
 
   addContact(newContact: any) {
-    return this.http.post<Contact>(this.url + "/contacts/add-contact", newContact)
+    console.log(newContact)
+    return this.http.post(this.url + "/contacts/add-contact", newContact)
   }
 }

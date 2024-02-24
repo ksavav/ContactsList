@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { AddContactDialogComponent } from '../add-contact-dialog/add-contact-dialog.component';
+import { CommunicationService } from 'src/app/services/communication.service';
+import { UserDetailsDialogComponent } from '../user-details-dialog/user-details-dialog.component';
 
+// actually its not add contact component, but contact modals middleware
 
 @Component({
   selector: 'app-add-contact',
@@ -9,36 +13,35 @@ import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
   styleUrls: ['./add-contact.component.css']
 })
 export class AddContactComponent {
+  @Output() ItemEvent = new EventEmitter<any>()
+  newContact: any
 
-  newContactForm: FormControl | any
-
-  constructor (private fb: FormBuilder, public modalRef: MdbModalRef<AddContactComponent>) {}
+  constructor(public dialog: MatDialog, private communicationService: CommunicationService) {}
 
   ngOnInit(): void {
-    this.newContactForm = this.fb.group({
-      name: new FormControl('', [
-        Validators.required
-      ]),
-      lastname: new FormControl('', [
-        Validators.required
-      ]),
-      email: new FormControl('', [
-        Validators.required
-      ]),
-      role: new FormControl('', [
-        Validators.required
-      ]),
-      specificRole: new FormControl('', [
-        Validators.required
-      ]),
-      phone: new FormControl('', [
-        Validators.required
-      ])
-    })
+    this.communicationService.contactSelected$.subscribe(contact => {
+      this.viewContact(contact);
+    });
   }
 
-  close(): void {
-    const closeMessage = 'Modal closed';
-    this.modalRef.close(closeMessage)
+  addContact() {
+    const dialogRef = this.dialog.open(AddContactDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.newContact = result
+      this.ItemEvent.emit(this.newContact)
+    });
+  }
+
+  viewContact(value: any) {
+    if (value != null) {
+      const dialogRef = this.dialog.open(UserDetailsDialogComponent)
+      dialogRef.componentInstance.contact = value
+
+      dialogRef.afterClosed().subscribe(result => {
+      //this.newContact = result
+      //this.ItemEvent.emit(this.newContact)
+    });
+    }
   }
 }

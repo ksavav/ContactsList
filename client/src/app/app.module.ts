@@ -11,6 +11,10 @@ import { RegisterScreenComponent } from './login/register-screen/register-screen
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { AddContactComponent } from './user/add-contact/add-contact.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { AddContactDialogComponent } from './user/add-contact-dialog/add-contact-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { UserDetailsDialogComponent } from './user/user-details-dialog/user-details-dialog.component';
 
 @NgModule({
   declarations: [
@@ -19,14 +23,18 @@ import { AddContactComponent } from './user/add-contact/add-contact.component';
     NavComponent,
     LoginScreenComponent,
     RegisterScreenComponent,
-    AddContactComponent
+    AddContactComponent,
+    AddContactDialogComponent,
+    UserDetailsDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NoopAnimationsModule,
+    MatDialogModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

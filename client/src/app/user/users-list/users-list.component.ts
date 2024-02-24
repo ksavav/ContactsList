@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { Component, EventEmitter, Output } from '@angular/core';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { Contact } from 'src/app/models/contact';
 import { User } from 'src/app/models/user';
 import { AccountService } from 'src/app/services/account.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { AddContactComponent } from '../add-contact/add-contact.component';
+import { CommunicationService } from 'src/app/services/communication.service';
 
 @Component({
   selector: 'app-users-list',
@@ -12,11 +13,12 @@ import { AddContactComponent } from '../add-contact/add-contact.component';
   styleUrls: ['./users-list.component.css']
 })
 export class UsersListComponent {
-  // modalRef: MdbModalRef<AddContactComponent> | null = null;
   contacts: Contact[] = [];
   user: User | undefined
 
-  constructor(private contactService: ContactService, private accountService: AccountService) {}
+  @Output() myEvent = new EventEmitter()
+
+  constructor(private contactService: ContactService, private accountService: AccountService, private communicationService: CommunicationService) {}
   
   ngOnInit(): void {
     this.getAllContacts()
@@ -42,7 +44,14 @@ export class UsersListComponent {
     this.user = tempUser
   }
 
-  addNewContact() {
-    //this.modalRef = this.modalService.open(AddContactComponent);
+  addNewContact(value: any) {
+    this.contactService.addContact(value).subscribe(response => {
+    })
+
+    this.getAllContacts()
+  }
+
+  viewContact(value: any) {
+    this.communicationService.selectContact(value)
   }
 }
