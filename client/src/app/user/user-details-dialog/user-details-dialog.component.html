@@ -1,0 +1,59 @@
+<h1 *ngIf="!editMode" class="mb-3" mat-dialog-title><strong>Contact details</strong></h1>
+<h1 *ngIf="editMode" class="mb-3" mat-dialog-title><strong>Edit Contact</strong></h1>
+
+<mat-dialog-content class="mat-typography" id="xd">
+    <form [formGroup]="editUserForm">
+        <div class="form-group mb-3">
+            <label class="mb-1" for="inputName">Name</label>
+            <input [readonly]="!editMode" type="text" class="form-control" formControlName="name">
+        </div>
+        <div class="form-group mb-3">
+            <label class="mb-1" for="inputName">Lastname</label>
+            <input [readonly]="!editMode" type="text" class="form-control" formControlName="lastname">
+        </div>
+        <div class="form-group mb-3">
+            <label class="mb-1" for="inputName">Phone</label>
+            <input [readonly]="!editMode" type="text" class="form-control" formControlName="phone">
+        </div>
+        <div class="form-group mb-3">
+            <label class="mb-1" for="inputName">Email</label>
+            <input [readonly]="!editMode" type="text" class="form-control" formControlName="newEmail">
+        </div>
+        <div *ngIf="!editMode">
+            <div class="form-group mb-3">
+                <label class="mb-1" for="inputName">Role</label>
+                <input [readonly]="!editMode" type="text" class="form-control" formControlName="role">
+            </div>
+            <div class="form-group mb-3">
+                <label class="mb-1" for="inputName">Specific Role</label>
+                <input [readonly]="!editMode" type="text" class="form-control" formControlName="specificRole">
+            </div>
+        </div> 
+        <div *ngIf="editMode">
+            <div class="form-group mb-3">
+                <label class="mb-1" for="inputRole">Role</label>
+                <select class="form-select mb-3" (change)="changeRole($event)" id="inputRole" formControlName="role">
+                    <option disabled selected value="">Role</option>
+                    <option *ngFor="let role of Roles" [ngValue]="role">{{ role }}</option>
+                </select>
+            </div>
+            <div *ngIf="selected == '1: Business'">
+                <label class="mb-1" for="inputSpecificRole">Specific Role</label>
+                <select class="form-select mb-3" (change)="changeRole($event)" id="inputSpecificRole" formControlName="specificRole">
+                    <option disabled selected value="">Role</option>
+                    <option *ngFor="let role of BusinessRoles" [ngValue]="role">{{ role }}</option>
+                </select>
+            </div>
+            <div *ngIf="selected != '1: Business'">
+                <label class="mb-1" for="inputSpecificRole">Specific Role</label>
+                <input [readonly]="!editMode" type="text" class="form-control" formControlName="specificRole" id="inputSpecificRole" placeholder="Enter specific role">
+            </div>
+        </div>
+        
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-dialog-close class="btn btn-danger md-2">Cancel</button>
+    <button *ngIf="!editMode" type="submit" (click)="changeEditMode()" class="btn btn-primary md-2">Edit</button>
+    <button *ngIf="editMode" type="submit" (click)="changeEditMode()" [disabled]="!this.editUserForm.valid" [mat-dialog-close]=this.editUserForm.value class="btn btn-success md-2">Save</button>
+</mat-dialog-actions>

@@ -1,6 +1,13 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { Contact } from 'src/app/models/contact';
 import { User } from 'src/app/models/user';
-import { UserService } from 'src/app/services/user.service';
+import { AccountService } from 'src/app/services/account.service';
+import { ContactService } from 'src/app/services/contact.service';
+import { AddContactComponent } from '../add-contact/add-contact.component';
+import { CommunicationService } from 'src/app/services/communication.service';
+import { EditService } from 'src/app/services/edit.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-users-list',
@@ -8,18 +15,70 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./users-list.component.css']
 })
 export class UsersListComponent {
-  users: User[] = [];
+  contacts: Contact[] = [];
+  user: User | undefined
 
+  @Output() myEvent = new EventEmitter()
 
-  constructor(private userService: UserService) {}
+  constructor(private contactService: ContactService, private accountService: AccountService,
+    private communicationService: CommunicationService, private editService: EditService, 
+    private toastr: ToastrService) {}
   
   ngOnInit(): void {
-    this.getAllUsers()
+    this.getAllContacts()
+    this.getUserInformations()
+
+    this.communicationService.contactEdited$.subscribe(contact => {
+      this.editContact(contact)
+    })
   }
 
-  getAllUsers(): void {
-    this.userService.getUsers().subscribe(users => {
-      this.users = users;
+  getAllContacts(): void {
+    this.contactService.getContacts().subscribe(contacts => {
+      this.contacts = contacts;
     });
+  }
+
+  getAllUserContacts(): void {
+    this.contactService.getUserContacts().subscribe(contacts => {
+      this.contacts = contacts
+    })
+  }
+
+  getUserInformations() {
+    var tempUser
+    this.accountService.currentUser$.subscribe({
+      next(value) {
+        if (value != null) {
+          tempUser = value
+        }
+      },
+    })
+
+    this.user = tempUser
+  }
+
+  addNewContact(value: any) {
+    this.contactService.addContact(value).subscribe({
+      next: _ => this.getAllContacts(),
+      error: _ => this.getAllContacts()
+    })
+  }
+
+  viewContact(value: any) {
+    this.communicationService.selectContact(value)
+  }
+
+  editContact(value: any) {
+    this.editService.editContact(value).subscribe({
+      next: _ => this.getAllContacts(),
+      error: err => {
+        this.getAllContacts()
+        this.toastr.success(err.error.text, "Success!")
+        console.error(err);
+        
+      }
+    })
+    //this.toastr.success('err.err', "Success!")
   }
 }

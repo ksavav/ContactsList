@@ -17,30 +17,24 @@ export class RegisterScreenComponent {
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
-      nameForm: new FormControl('', [
+      name: new FormControl('', [
         Validators.required
       ]),
-      surnameForm: new FormControl('', [
+      lastname: new FormControl('', [
         Validators.required
       ]),
-      emailForm: new FormControl('', [
+      email: new FormControl('', [
         Validators.required
       ]),
-      phoneForm: new FormControl('', [
+      phone: new FormControl('', [
         Validators.required
       ]),
-      roleForm: new FormControl('', [
-        Validators.required
-      ]),
-      specificRoleForm: new FormControl('', [
-        Validators.required
-      ]),
-      passwordForm: new FormControl('', [
+      password: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(20)
       ]),
-      cpasswordForm: new FormControl('', [
+      cpassword: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(20)
@@ -51,15 +45,14 @@ export class RegisterScreenComponent {
   getValuesFromForm() {
     if(this.registerForm.valid) {
       if(this.registerForm.value.passwordForm == this.registerForm.value.cpasswordForm) {
-        const values = {...this.registerForm.value}
-        console.log(values)
-        this.register(values)
+        console.log(this.registerForm.value)
+        this.register(this.registerForm.value)
       }
     }
   }
 
   register(values: any) {
-    this.accountService.register(values).subscribe({
+    this.accountService.register(this.registerForm.value).subscribe({
       next: _ => this.router.navigateByUrl('/')
     })
   }

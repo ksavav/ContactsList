@@ -13,7 +13,7 @@ export class AccountService {
 
   private currentUserSource = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
-
+  
   constructor(private http: HttpClient) { }
 
   login(loginUser: any) {
@@ -21,7 +21,7 @@ export class AccountService {
       map((response: User) => {
         let user = response
         if(user) {
-          this.currentUserSource.next(user)
+          this.setCurrentUser(user)
         }
       })
     )
@@ -31,13 +31,20 @@ export class AccountService {
     return this.http.post<User>(this.url + "/account/register", newUser).pipe(
       map(user => {
         if(user) {
-          this.currentUserSource.next(user)
+          this.setCurrentUser(user)
         }
       })
     )
   }
 
+  setCurrentUser(user: User){
+    localStorage.setItem('user', JSON.stringify(user));
+    this.currentUserSource.next(user);
+  }
+
   logout() {
-    this.currentUserSource.next(null);
+    localStorage.removeItem('user')
+    this.currentUserSource.next(null)
+    window.location.reload()
   }
 }

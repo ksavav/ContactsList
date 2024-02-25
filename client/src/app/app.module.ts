@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UsersListComponent } from './user/users-list/users-list.component';
@@ -9,6 +9,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginScreenComponent } from './login/login-screen/login-screen.component';
 import { RegisterScreenComponent } from './login/register-screen/register-screen.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import { AddContactComponent } from './user/add-contact/add-contact.component';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { AddContactDialogComponent } from './user/add-contact-dialog/add-contact-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { UserDetailsDialogComponent } from './user/user-details-dialog/user-details-dialog.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -16,16 +23,29 @@ import { ReactiveFormsModule } from '@angular/forms';
     UsersListComponent,
     NavComponent,
     LoginScreenComponent,
-    RegisterScreenComponent
+    RegisterScreenComponent,
+    AddContactComponent,
+    AddContactDialogComponent,
+    UserDetailsDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NoopAnimationsModule,
+    MatDialogModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

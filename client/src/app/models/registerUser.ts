@@ -1,10 +1,7 @@
 export interface registerUser {
     name: string
-    surname: string
+    lastname: string
     email: string
     password: string
-    role: string
-    specificRole: string
     phone: number
-    birthday: string
 }
