@@ -12,6 +12,6 @@ export class EditService {
   constructor(private http: HttpClient) { }
 
   editContact(editedContact: any) {
-    return this.http.put(this.url + "/edit", editedContact)
+    return this.http.put(this.url + "/edit", editedContact, { responseType: 'text' })
   }
 }

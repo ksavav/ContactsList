@@ -34,15 +34,27 @@ export class UsersListComponent {
   }
 
   getAllContacts(): void {
-    this.contactService.getContacts().subscribe(contacts => {
-      this.contacts = contacts;
+    this.contactService.getContacts().subscribe({
+      next: response => {
+        this.contacts = response
+        this.toastr.success("All contacts have been loaded", "Success!")
+      },
+      error: err => {
+        this.toastr.error("Could not load the contacts!", "Something went wrong")
+      }
     });
   }
 
   getAllUserContacts(): void {
-    this.contactService.getUserContacts().subscribe(contacts => {
-      this.contacts = contacts
-    })
+    this.contactService.getUserContacts().subscribe({
+      next: response => {
+        this.contacts = response
+        this.toastr.success("Your contacts have been loaded", "Success!")
+      },
+      error: err => {
+        this.toastr.error("Could not load the contacts!", "Something went wrong")
+      }
+    });
   }
 
   getUserInformations() {
@@ -71,14 +83,16 @@ export class UsersListComponent {
 
   editContact(value: any) {
     this.editService.editContact(value).subscribe({
-      next: _ => this.getAllContacts(),
+      next: response =>{ 
+        this.getAllContacts()
+        this.toastr.success(response, "Success!")
+        console.log(response)
+      },
       error: err => {
         this.getAllContacts()
-        this.toastr.success(err.error.text, "Success!")
+        this.toastr.error(err.error, "Something went wrong")
         console.error(err);
-        
       }
     })
-    //this.toastr.success('err.err', "Success!")
   }
 }
