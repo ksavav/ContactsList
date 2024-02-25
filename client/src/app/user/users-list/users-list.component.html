@@ -2,10 +2,10 @@
     <div class="d-flex flex-row">
         <app-add-contact (ItemEvent)="addNewContact($event)" *ngIf="user != null"></app-add-contact>
         <div class="p-2">
-            <button class="btn btn-success" (click)="getAllContacts()">Load all</button>
+            <button class="btn btn-success" (click)="getAllContacts()" *ngIf="user != null">Load all</button>
         </div>
         <div class="p-2">
-            <button class="btn btn-danger" (click)="getAllUserContacts()">Load yours</button>
+            <button class="btn btn-danger" (click)="getAllUserContacts()" *ngIf="user != null">Load yours</button>
         </div>
     </div>
     

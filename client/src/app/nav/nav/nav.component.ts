@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { filter } from 'rxjs';
 import { AccountService } from 'src/app/services/account.service';
 
@@ -13,7 +14,7 @@ export class NavComponent {
   userName: string | undefined
   userLastname: string | undefined
 
-  constructor(public accountService: AccountService, private router: Router) {}
+  constructor(public accountService: AccountService, private router: Router, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.router.events
@@ -49,7 +50,6 @@ export class NavComponent {
 
   logout() {
     this.accountService.logout()
+    this.toastr.info("Logout")
   }
-
-  
 }
