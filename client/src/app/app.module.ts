@@ -11,10 +11,11 @@ import { RegisterScreenComponent } from './login/register-screen/register-screen
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { AddContactComponent } from './user/add-contact/add-contact.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AddContactDialogComponent } from './user/add-contact-dialog/add-contact-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { UserDetailsDialogComponent } from './user/user-details-dialog/user-details-dialog.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,13 @@ import { UserDetailsDialogComponent } from './user/user-details-dialog/user-deta
     NgbModule,
     ReactiveFormsModule,
     NoopAnimationsModule,
-    MatDialogModule
+    MatDialogModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

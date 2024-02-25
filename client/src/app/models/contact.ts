@@ -5,5 +5,5 @@ export interface Contact {
     email: string
     role: string
     specificRole: string
-    token: string
+    userId: number
 }

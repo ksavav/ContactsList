@@ -19,10 +19,10 @@ namespace api.Controllers
         }
         
         [HttpPut]
-        public async Task<ActionResult> UpdateUser(UpdateContactDto updatedUser) // zmiana na contact
+        public async Task<ActionResult> UpdateUser(UpdateContactDto updatedContact) // zmiana na contact
         {
             var user = await GetCredentials(_context);
-            var contact = await _context.Contacts.FirstOrDefaultAsync(x => x.Email == updatedUser.Email);
+            var contact = await _context.Contacts.FirstOrDefaultAsync(x => x.Email == updatedContact.Email);
 
             if (user == null || contact == null)
             {
@@ -34,21 +34,21 @@ namespace api.Controllers
                 return BadRequest("You can edit only your contacts!");
             }
 
-            if (updatedUser.NewEmail != null)
+            if (updatedContact.NewEmail != null && updatedContact.NewEmail != updatedContact.Email)
             {
-                if (await _context.Contacts.FirstOrDefaultAsync(x => x.Email == updatedUser.NewEmail) != null)
+                if (await _context.Contacts.FirstOrDefaultAsync(x => x.Email == updatedContact.NewEmail) != null)
                 {
                     return BadRequest("This email is already used");
                 }
 
-                contact.Email = updatedUser.NewEmail;
+                contact.Email = updatedContact.NewEmail;
             }
 
-            contact.Name = updatedUser.Name;
-            contact.Lastname = updatedUser.Lastname;
-            contact.Phone = updatedUser.Phone;
-            contact.Role = updatedUser.Role;
-            contact.SpecificRole = updatedUser.SpecificRole;
+            contact.Name = updatedContact.Name;
+            contact.Lastname = updatedContact.Lastname;
+            contact.Phone = updatedContact.Phone;
+            contact.Role = updatedContact.Role;
+            contact.SpecificRole = updatedContact.SpecificRole;
 
             await _context.SaveChangesAsync();
 

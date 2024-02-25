@@ -25,6 +25,10 @@ export class ContactService {
     return this.http.get<any>(`${this.url}/contacts`)
   }
 
+  getUserContacts(): Observable<any> {
+    return this.http.get<any>(`${this.url}/contacts/for-user`)
+  }
+
   addContact(newContact: any) {
     console.log(newContact)
     return this.http.post(this.url + "/contacts/add-contact", newContact)

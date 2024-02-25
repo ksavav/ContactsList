@@ -4,6 +4,20 @@
 @use '@angular/material' as mat;
 // Plus imports for other components in your app.
 
+// // regular style toast
+// @import '~ngx-toastr/toastr';
+
+// // bootstrap style toast
+// // or import a bootstrap 4 alert styled design (SASS ONLY)
+// // should be after your bootstrap imports, it uses bs4 variables, mixins, functions
+// @import '~ngx-toastr/toastr-bs4-alert';
+
+// // if you'd like to use it without importing all of bootstrap it requires
+// @import '~bootstrap/scss/functions';
+// @import '~bootstrap/scss/variables';
+// @import '~bootstrap/scss/mixins';
+// @import '~ngx-toastr/toastr-bs4-alert';
+
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!

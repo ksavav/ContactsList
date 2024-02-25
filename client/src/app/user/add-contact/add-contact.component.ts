@@ -39,9 +39,10 @@ export class AddContactComponent {
       dialogRef.componentInstance.contact = value
 
       dialogRef.afterClosed().subscribe(result => {
-      //this.newContact = result
-      //this.ItemEvent.emit(this.newContact)
-    });
+        if (result != null) {
+          this.communicationService.returnEditedContact(result)
+        }
+      });
     }
   }
 }

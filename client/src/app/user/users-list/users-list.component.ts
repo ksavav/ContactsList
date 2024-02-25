@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { Contact } from 'src/app/models/contact';
 import { User } from 'src/app/models/user';
@@ -6,6 +6,8 @@ import { AccountService } from 'src/app/services/account.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { AddContactComponent } from '../add-contact/add-contact.component';
 import { CommunicationService } from 'src/app/services/communication.service';
+import { EditService } from 'src/app/services/edit.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-users-list',
@@ -18,17 +20,29 @@ export class UsersListComponent {
 
   @Output() myEvent = new EventEmitter()
 
-  constructor(private contactService: ContactService, private accountService: AccountService, private communicationService: CommunicationService) {}
+  constructor(private contactService: ContactService, private accountService: AccountService,
+    private communicationService: CommunicationService, private editService: EditService, 
+    private toastr: ToastrService) {}
   
   ngOnInit(): void {
     this.getAllContacts()
     this.getUserInformations()
+
+    this.communicationService.contactEdited$.subscribe(contact => {
+      this.editContact(contact)
+    })
   }
 
   getAllContacts(): void {
     this.contactService.getContacts().subscribe(contacts => {
       this.contacts = contacts;
     });
+  }
+
+  getAllUserContacts(): void {
+    this.contactService.getUserContacts().subscribe(contacts => {
+      this.contacts = contacts
+    })
   }
 
   getUserInformations() {
@@ -45,13 +59,26 @@ export class UsersListComponent {
   }
 
   addNewContact(value: any) {
-    this.contactService.addContact(value).subscribe(response => {
+    this.contactService.addContact(value).subscribe({
+      next: _ => this.getAllContacts(),
+      error: _ => this.getAllContacts()
     })
-
-    this.getAllContacts()
   }
 
   viewContact(value: any) {
     this.communicationService.selectContact(value)
+  }
+
+  editContact(value: any) {
+    this.editService.editContact(value).subscribe({
+      next: _ => this.getAllContacts(),
+      error: err => {
+        this.getAllContacts()
+        this.toastr.success(err.error.text, "Success!")
+        console.error(err);
+        
+      }
+    })
+    //this.toastr.success('err.err', "Success!")
   }
 }
